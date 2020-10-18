@@ -34,6 +34,23 @@ class TestDeleteEmploye(unittest.TestCase):
         application.execute(command_delete_employee)
         self.assertEqual(len(application.employees), 0)
 
+    def test_delete_non_existing_employee(self):
+        command_delete_employee = "DelEmp 140"
+        application = Application()
+        application.execute("AddEmp 135 Jason Home H 10.0")
+        self.assertEqual(len(application.employees), 1)
+        application.execute(command_delete_employee)
+        self.assertEqual(len(application.employees), 1)
+
+    def test_wrong_delete_command(self):
+        command_delete_employee = "DelEmp"
+        application = Application()
+        application.execute("AddEmp 135 Jason Home H 10.0")
+        self.assertEqual(len(application.employees), 1)
+
+        with self.assertRaises(IndexError) as context:
+            application.execute(command_delete_employee)
+
 
 if __name__ == '__main__':
     unittest.main()

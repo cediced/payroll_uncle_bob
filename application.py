@@ -11,6 +11,7 @@ class Application:
         elif self.get_command(user_input) == "DelEmp":
             self.delete_employee(int(self.get_every_data_field(user_input)[0]))
 
+
     def get_every_data_field(self, user_input):
         return " ".join(user_input.split()[1:]).split()
 
@@ -23,9 +24,17 @@ class Application:
                 return i
 
     def delete_employee(self, employee_id):
-        for i, employee in enumerate(self.employees):
-            if employee_id == employee.id:
-                del self.employees[i]
+        try:
+            for i, employee in enumerate(self.employees):
+                if employee_id == employee.id:
+                    del self.employees[i]
+                    break
+            else:
+                print(f"employee number {employee_id} not found")
+        except IndexError:
+            print("error, you missed one/more argument")
+            print("example: DelEmp 135")
+            raise
 
 
 class Employee:
