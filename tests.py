@@ -52,5 +52,25 @@ class TestDeleteEmploye(unittest.TestCase):
             application.execute(command_delete_employee)
 
 
+class TestTimeCard(unittest.TestCase):
+    def test_create_time_card_on_hours_employee(self):
+        command = "TimeCard 135 03.08.2020 5.5"
+        application = Application()
+        application.execute("AddEmp 135 Jason Home H 10.0")
+        application.execute(command)
+        assert len(application.time_cards) == 1
+        assert application.time_cards[0].date == "03.08.2020"
+        assert application.time_cards[0].hours == 5.5
+        assert application.time_cards[0].employee_id == 135
+
+    def test_add_timecard_not_hours_employee(self):
+        application = Application()
+        application.execute("AddEmp 137 Jason Home S 10.0")
+
+        with self.assertRaises(Exception) as context:
+            application.execute("TimeCard 137 03.08.2020 5.5")
+        assert "137 is not an hours employee" in str(context.exception)
+
+
 if __name__ == '__main__':
     unittest.main()
